@@ -1,0 +1,29 @@
+name: lncrawl-published
+
+services:
+  postgres:
+    image: postgres:alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-pguser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pgpass}
+      POSTGRES_DB: ${POSTGRES_DB:-lncrawl}
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+
+  server:
+    image: ${LNCRAWL_IMAGE:-ghcr.io/lncrawl/lightnovel-crawler:latest}
+    restart: unless-stopped
+    ports:
+      - "${LNCRAWL_PORT:-8080}:8080"
+    command: -ll server
+    environment:
+      PYTHONUNBUFFERED: "1"
+      LNCRAWL_DATA_PATH: /data
+      PUID: ${PUID:-1000}
+      PGID: ${PGID:-1000}
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-pguser}:${POSTGRES_PASSWORD:-pgpass}@postgres:5432/${POSTGRES_DB:-lncrawl}
+    volumes:
+      - ./appdata:/data
+    depends_on:
+      - postgres

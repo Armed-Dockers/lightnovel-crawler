@@ -172,9 +172,26 @@ $ make docker-build
 - Run server with Docker Compose:
 
 ```bash
+$ export PUID=$(id -u)
+$ export PGID=$(id -g)
 $ make docker-up
 # or: docker compose -f scripts/local-compose.yml up -d
 ```
+
+`scripts/local-compose.yml`, `scripts/server-compose.yml`, and `scripts/published-compose.yml` support `PUID` and `PGID` (default: `1000:1000`). The container entrypoint applies ownership on `LNCRAWL_DATA_PATH` (`/data`) before starting the app, which avoids `PermissionError` from stale root-owned files.
+
+- Run the published image directly (no local build required):
+
+```bash
+$ export PUID=$(id -u)
+$ export PGID=$(id -g)
+$ make docker-up-published
+# or: docker compose -f scripts/published-compose.yml up -d
+```
+
+By default `scripts/published-compose.yml` uses `ghcr.io/lncrawl/lightnovel-crawler:latest`. You can override this with `LNCRAWL_IMAGE` (for example `hackmonker/lncrawl:latest`).
+
+The GitHub Actions publish workflow (`.github/workflows/publish.yml`) builds and publishes multi-arch images to both GHCR and Docker Hub on pushes to `main` and manual runs.
 
 ## General Usage
 
