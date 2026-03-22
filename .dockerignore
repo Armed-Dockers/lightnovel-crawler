@@ -39,6 +39,9 @@ node_modules
 package.json
 save_pid.txt
 scripts/
+!scripts/
+scripts/*
+!scripts/docker-entrypoint.sh
 Test Novel
 windows/
 yarn.lock
