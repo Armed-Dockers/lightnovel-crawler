@@ -13,7 +13,6 @@ services:
 
   server:
     image: ${LNCRAWL_IMAGE:-ghcr.io/lncrawl/lightnovel-crawler:latest}
-    user: "${PUID:-1000}:${PGID:-1000}"
     restart: unless-stopped
     ports:
       - "${LNCRAWL_PORT:-8080}:8080"
@@ -21,6 +20,8 @@ services:
     environment:
       PYTHONUNBUFFERED: "1"
       LNCRAWL_DATA_PATH: /data
+      PUID: ${PUID:-1000}
+      PGID: ${PGID:-1000}
       DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-pguser}:${POSTGRES_PASSWORD:-pgpass}@postgres:5432/${POSTGRES_DB:-lncrawl}
     volumes:
       - ./appdata:/data

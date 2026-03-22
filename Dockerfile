@@ -21,7 +21,10 @@ WORKDIR /app
 COPY --from=builder /app/.venv /app/.venv
 COPY lncrawl ./lncrawl
 COPY sources ./sources
+COPY scripts/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 ENV LNCRAWL_DATA_PATH=/data
 
-ENTRYPOINT ["/app/.venv/bin/python", "-m", "lncrawl"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
