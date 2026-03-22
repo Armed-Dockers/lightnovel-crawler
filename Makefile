@@ -1,4 +1,4 @@
-.PHONY: all version clean setup install upgrade add-dep add-dev rm-dep rm-dev build-wheel build-exe build start watch lint pull remove-tag push-tag push-tag-force docker-build docker-up docker-down docker-logs
+.PHONY: all version clean setup install upgrade add-dep add-dev rm-dep rm-dev build-wheel build-exe build start watch lint pull remove-tag push-tag push-tag-force docker-build docker-up docker-down docker-logs docker-up-published docker-down-published docker-logs-published
 all: version install
 
 VERSION := $(strip $(file < lncrawl/VERSION))
@@ -106,3 +106,12 @@ docker-down:
 
 docker-logs:
 	docker compose -f scripts/local-compose.yml logs -f
+
+docker-up-published:
+	docker compose -f scripts/published-compose.yml up -d
+
+docker-down-published:
+	docker compose -f scripts/published-compose.yml down
+
+docker-logs-published:
+	docker compose -f scripts/published-compose.yml logs -f
