@@ -178,7 +178,7 @@ $ make docker-up
 # or: docker compose -f scripts/local-compose.yml up -d
 ```
 
-`scripts/local-compose.yml`, `scripts/server-compose.yml`, and `scripts/published-compose.yml` support `PUID` and `PGID` (default: `1000:1000`). The container entrypoint applies ownership on `LNCRAWL_DATA_PATH` (`/data`) before starting the app, which avoids `PermissionError` from stale root-owned files.
+`scripts/local-compose.yml` and `scripts/server-compose.yml` support `PUID` and `PGID` environment variables (default: `1000:1000`) so mounted files are created with your host user/group instead of root.
 
 - Run the published image directly (no local build required):
 
